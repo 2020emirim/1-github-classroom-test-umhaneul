@@ -1,9 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from .models import Question
 
 def index(request):
-    return HttpResponse("Hello world You're at the polls index.")
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    output = ', '.join([q.question_text for q in latest_question_list])
+    #["좋아하는 가수?", "좋아하는 색깔?"]
+    #"좋아하는 가수?, 좋아하는 색깔?"
+    return HttpResponse(output)
 
 
 def detail(request, question_id):
@@ -11,7 +16,7 @@ def detail(request, question_id):
 
 
 def results(request, question_id):
-    response = "You're looking at the results of question %s."
+    response = "You're looking at the results of question %s"
     return HttpResponse(response % question_id)
 
 
